@@ -1,0 +1,101 @@
+
+
+
+Private Sub LaunchWord_Click()
+
+Private Sub cmdPrint_Click()
+
+'Print customer slip for current customer.
+
+Dim appWord As Word.Application
+
+Dim doc As Word.Document
+
+Dim rst As ADODB.Recordset
+
+'Avoid error 429, when Word isn't open.
+
+On Error Resume Next
+
+Err.Clear
+
+'Set appWord object variable to running instance of Word.
+
+Set appWord = GetObject(, "Word.Application")
+
+If Err.Number <> 0 Then
+
+'If Word isn't open, create a new instance of Word.
+
+Set appWord = New Word.Application
+
+End If
+
+'Populate recordset object.
+
+Set rst = New ADODB.Recordset
+
+rst.Open Me.RecordSource, CurrentProject.Connection
+
+'Cycle through records to fill Word form fields.
+
+Do While Not rst.EOF
+
+Set doc = appWord.Documents.Open("C:\WordForms\CustomerSlip.doc", , True)
+
+With doc
+
+.FormFields("fldCustomerID").Result = rst!CustomerID
+
+.FormFields("fldCompanyName").Result = rst!CompanyName
+
+.FormFields("fldContactName").Result = rst!ContactName
+
+.FormFields("fldContactTitle").Result = rst!ContactTitle
+
+.FormFields("fldAddress").Result = rst!Address
+
+.FormFields("fldCity").Result = rst!City
+
+.FormFields("fldRegion").Result = rst!Region
+
+.FormFields("fldPostalCode").Result = rst!PostalCode
+
+.FormFields("fldCountry").Result = rst!Country
+
+.FormFields("fldPhone").Result = rst!Phone
+
+.FormFields("fldFax").Result = rst!Fax
+
+.Visible = True
+
+.Activate
+
+'.PrintOut
+
+'.SaveAs "'" & rst!CustomerID & "'"
+
+rst.MoveNext
+
+End With
+
+Loop
+
+Set doc = Nothing
+
+Set appWord = Nothing
+
+Exit Sub
+
+errHandler:
+
+MsgBox Err.Number & ": " & Err.Description
+
+End Sub
+
+
+
+
+
+With doc
+    .FormFields("fldRadnoMesto").Result = Me.NazivRadnogMesta

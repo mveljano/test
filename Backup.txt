@@ -1,0 +1,37 @@
+Option Compare Database
+Option Explicit
+
+Public Function BackupDB()
+ Dim sourceFile As String, destinationFile As String
+ Dim aFSO As Variant
+ Dim path As String, name As String
+ Dim AckTime As Integer, InfoBox As Object
+ 
+sourceFile = CurrentProject.FullName
+ path = CurrentProject.path
+ name = CurrentProject.name
+ destinationFile = path & "\backup\HSELiveDB\" & Left(name, Len(name) - 6) & "_backup" & "_" & _
+ Year(Now) & "_" & Month(Now) & "_" & Day(Now) & ".accdb"
+
+'this removes a file created on the same day
+ If Dir(destinationFile) <> "" Then
+ Kill destinationFile
+ End If
+
+'this creates a backup into destination path
+ If Dir(destinationFile) = "" Then
+
+ Set aFSO = CreateObject("Scripting.FileSystemObject")
+    aFSO.CopyFile sourceFile, destinationFile, True
+    
+    Set InfoBox = CreateObject("WScript.Shell")
+    AckTime = 3
+        Select Case InfoBox.PopUp("Rezervna kopija (backup) je napravljena u: " & destinationFile & ". Kliknite OK.", _
+            AckTime, "Information: Backup Created", 0)
+            Case 1, -1
+        'Exit Sub
+    End Select
+
+'MsgBox "Rezervna kopija (backup) je napravljena u: " & destinationFile
+ End If
+ End Function

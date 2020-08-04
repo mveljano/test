@@ -1,0 +1,66 @@
+Public Function CreateWordLetter(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim PrintResponse
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")  
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open(strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("<bookmark name>".Select
+       .Selection.Text=(Cstr(Forms!<form name>!<field 
+        name>))
+ 
+   End With
+
+   'find out if the user would like to print the document
+   'at this time.
+
+   PrintResponse = MsgBox("Print this document?", vbyesno)
+   If PrintResponse = vbYes Then
+      objWord.ActiveDocument.PrintOut Background:=False
+   End If
+
+   'release all objects
+         
+   Set objWord = nothing
+   Set dbs = nothing
+
+End Function
+
+Ok, now the function is written - however, this is only half the battle.  Now we have to create/edit the document you are using so the above code actually works! :)
+
+1)  Open your document.  If you do not have a current 
+    document that you are not using, create a new one.
+
+2)  In the places where the values will change based on 
+    information in the record, create a bookmark and name 
+    it appropriately.  i.e. If you have a field in Access 
+    called FirstName, then make the bookmark name "First 
+    Name", etc etc
+
+3)  After creating / editing your document, save it.  
+    Remember the file name.
+
+4)  Back to Access!  Create a button on a form somewhere, 
+    and name it appropriately (ie cmdMerge, cmdMakeLetter, 
+    etc)
+
+5)  In the On_Click event of your button, use an event 
+    procedure and add the following line of code:
+
+    CreateWordLetter "<path to your document>"
+
+6)  Watch everything kick into action! :)

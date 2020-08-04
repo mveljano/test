@@ -1,0 +1,29 @@
+'Create a Recordset from all the records in the Orders table
+   Dim sTest As String
+   Dim conn As New ADODB.Connection
+   Dim rs As ADODB.Recordset
+   sTest = _
+      "C:\Users\mveljano\Documents\Access\Test\Database1.accdb"
+   conn.Open "Provider=Microsoft.Jet.OLEDB.15.0;Data Source=" & _
+      sTest & ";"
+   conn.CursorLocation = adUseClient
+   Set rs = conn.Execute("OrdersDate", , adCmdTable)
+   
+   'Create a new workbook in Excel
+   Dim oExcel As Object
+   Dim oBook As Object
+   Dim oSheet As Object
+   Set oExcel = CreateObject("Excel.Application")
+   Set oBook = oExcel.Workbooks.Add
+   Set oSheet = oBook.Worksheets(1)
+   
+   'Transfer the data to Excel
+   oSheet.Range("A1").CopyFromRecordset rs
+   
+   'Save the Workbook and Quit Excel
+   oBook.SaveAs "C:\Users\mveljano\Documents\Access\Test\Test.xls"
+   oExcel.Quit
+   
+   'Close the connection
+   rs.Close
+   conn.Close

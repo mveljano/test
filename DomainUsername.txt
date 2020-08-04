@@ -1,0 +1,36 @@
+Declare Function WNetGetUser Lib "mpr.dll" _
+  Alias "WNetGetUserA" (ByVal lpName As String, _
+  ByVal lpUserName As String, lpnLength As Long) As Long
+
+Const NoError = 0           'The Function call was successful
+
+Function GetUserName() As String
+
+   Dim LUserName As String
+   Const lpnLength As Integer = 255
+   Dim status As Integer
+   Dim lpName
+
+   ' Assign the buffer size constant to lpUserName.
+   LUserName = Space$(lpnLength + 1)
+
+   ' Get the log-on name of the person using product.
+   status = WNetGetUser(lpName, LUserName, lpnLength)
+
+   ' See whether error occurred.
+   If status = NoError Then
+      ' This line removes the null character. Strings in C are null-
+      ' terminated. Strings in Visual Basic are not null-terminated.
+      ' The null character must be removed from the C strings to be used
+      ' cleanly in Visual Basic.
+      LUserName = Left$(LUserName, InStr(LUserName, Chr(0)) - 1)
+
+   Else
+      ' An error occurred.
+      MsgBox "Unable to get the name."
+      End
+   End If
+
+   GetUserName = LUserName
+
+End Function

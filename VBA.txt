@@ -1,0 +1,864 @@
+'frmAddCategory
+Option Compare Database
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If Not (Me.NewRecord) Then
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+    End If
+    Else
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+        End If
+    End If
+End Sub
+
+'frmAddEmployee
+'Option Compare Database
+'Option Explicit
+
+'Private Sub btnFormViewSelector_Click()
+   ' Me.btnFormViewSelector.SetFocus
+
+   ' Select Case Me.CurrentView
+   ' Case 1
+    'Currently in form view
+   ' DoCmd.RunCommand (acCmdLayoutView)
+   ' Case 2
+    'Currently in datasheet view
+   ' DoCmd.RunCommand (acCmdFormView)
+   ' Case Else
+    'Must be design view (0) or some as yet undefined view
+    'So do nothing.
+   ' End Select
+'End Sub
+
+'Private Sub ToggleDatasheet_Click()
+ ' Me.DatasheetSubControl.Visible = Not Me.DatasheetSubControl.Visible
+ ' Me.FormSubControl.Visible = Not Me.FormSubControl.Visible
+'End Sub
+
+'frmAddPosition
+Option Compare Database
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If Not (Me.NewRecord) Then
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+    End If
+    Else
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+        End If
+    End If
+End Sub
+
+'frmControlPanel
+'Option Compare Database
+Option Explicit
+
+
+Private Sub Form_Load()
+     If DCount("ZaposleniID", "QPME_Main") > 0 Then
+        [Forms]![frmControlPanel].[txtPHC] = "There are some employees with an expired medical check."
+        DoCmd.OpenQuery "QPME_Main"
+    Else
+       [Forms]![frmControlPanel].[txtPHC] = "All periodical medical checks are up to date."
+    End If
+    
+     If DCount("ZaposleniID", "QZOP_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtFPT] = "There are employees without FPT."
+        DoCmd.OpenQuery "QZOP_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtFPT] = "All employees have passed FPT."
+    End If
+    
+    If DCount("ZaposleniID", "QLPR_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtHC] = "There are some employees that have no medical check form."
+        DoCmd.OpenQuery "QLPR_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtHC] = "All medical check forms are up to date."
+    End If
+End Sub
+
+Private Sub btnCheck_Click()
+     If DCount("ZaposleniID", "QPME_Main") > 0 Then
+        [Forms]![frmControlPanel].[txtPHC] = "There are some employees with an expired medical check."
+        DoCmd.OpenQuery "QPME_Main"
+    Else
+       [Forms]![frmControlPanel].[txtPHC] = "All periodical medical checks are up to date."
+    End If
+    
+     If DCount("ZaposleniID", "QZOP_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtFPT] = "There are employees without FPT."
+        DoCmd.OpenQuery "QZOP_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtFPT] = "All employees have passed FPT."
+    End If
+    
+    If DCount("ZaposleniID", "QLPR_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtHC] = "There are some employees that have no medical check form."
+        DoCmd.OpenQuery "QLPR_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtHC] = "All medical check forms are up to date."
+    End If
+End Sub
+
+Private Sub Form_Timer()
+    Me.txtClock.Requery
+End Sub
+
+Private Sub txtDate_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Me.txtDate.Requery
+End Sub
+
+Private Sub txtPHC_Click()
+    DoCmd.OpenQuery "QPME_Main"
+End Sub
+
+Private Sub txtHC_Click()
+    DoCmd.OpenQuery "QLPR_MainNull"
+End Sub
+
+Private Sub txtFPT_Click()
+    DoCmd.OpenQuery "QZOP_MainNull"
+End Sub
+
+Rem MAIN FORM LOCALIZATIONS
+
+Private Sub btnLocalizationDefault_Click()
+ btnEmployeesForm_Open.Caption = "Open"
+ btnNewEmployee.Caption = "New"
+ btnHSEForm_Open.Caption = "Open"
+ btnNewDA.Caption = "New"
+ btnHCForm_Open.Caption = "Open"
+ btnNewHSE.Caption = "New"
+ btnCheck.Caption = "Update All"
+ btnBackup.Caption = "Backup"
+ btnOK.Caption = "OK"
+ pForms.Caption = "General"
+ pReports.Caption = "Reports"
+ pQueries.Caption = "Queries"
+ lblEmployeesCP.Caption = "Employees"
+ lblME_CP.Caption = "Health Checks"
+ lblZOP_CP.Caption = "Fire Protection Training"
+ lblZOP_CP.FontSize = 11
+ lblHSE_CP.Caption = "HSE Training"
+ lblEmployees_Status.Caption = "All Employees"
+ btnAllEmployees_Open.Caption = "Open"
+ btnAllEmployees_Print.Caption = "Print"
+ btnAllEmployees_Send.Caption = "Send"
+ btnAllEmployees_Preview.Caption = "Preview"
+ lblDA_Status.Caption = "Employees without a health check"
+ lblDA_Status.FontSize = 8
+ lblFPT_Status.Caption = "Employees without FPT"
+ btnHC_Open.Caption = "Open"
+ btnHC_Print.Caption = "Print"
+ btnHC_Send.Caption = "Send"
+ btnHC_Preview.Caption = "Preview"
+ btnZOP_Open.Caption = "Open"
+ btnZOP_Print.Caption = "Print"
+ btnZOP_Mail.Caption = "Send"
+ btnZOP_Preview.Caption = "Preview"
+ btnFPT_Null.Caption = "Employees without FPT"
+ btnAddCategory.Caption = "Add Category"
+ btnAddPosition.Caption = "Add Position"
+ btnForm1.Caption = "Form 1"
+ btnForm1.FontSize = 8
+ btnForm2.Caption = "Form 2"
+ btnForm2.FontSize = 8
+ btnForm6.Caption = "Form 6"
+ btnForm6.FontSize = 8
+ lblHSE_Status.Caption = "Employees without HSET"
+ btnHSET_Open.Caption = "Open"
+ btnHSET_Print.Caption = "Print"
+ btnHSET_Send.Caption = "Send"
+ btnHSET_Preview.Caption = "Preview"
+ 
+     If DCount("ZaposleniID", "QPME_Main") > 0 Then
+        [Forms]![frmControlPanel].[txtPHC] = "There are some employees with an expired medical check."
+        'DoCmd.OpenQuery "QPME_Main"
+    Else
+       [Forms]![frmControlPanel].[txtPHC] = "All periodical medical checks are up to date."
+    End If
+    
+     If DCount("ZaposleniID", "QZOP_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtFPT] = "There are employees without FPT."
+        'DoCmd.OpenQuery "QZOP_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtFPT] = "All employees have passed FPT."
+    End If
+    
+    If DCount("ZaposleniID", "QLPR_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtHC] = "There are some employees that have no medical check form."
+        'DoCmd.OpenQuery "QLPR_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtHC] = "All medical check forms are up to date."
+    End If
+ 
+End Sub
+
+Private Sub btnLocalizationRS_Click()
+ btnEmployeesForm_Open.Caption = "Otvori"
+ btnNewEmployee.Caption = "Novo"
+ btnHCForm_Open.Caption = "Otvori"
+ btnNewDA.Caption = "Novo"
+ btnHSEForm_Open.Caption = "Otvori"
+ btnNewHSE.Caption = "Novo"
+ btnCheck.Caption = "Ažuriraj sve"
+ btnBackup.Caption = "Rezervna kopija"
+ btnOK.Caption = "OK"
+ pForms.Caption = "Obrasci"
+ pReports.Caption = "Izveštaji"
+ pQueries.Caption = "Upiti"
+ lblEmployeesCP.Caption = "Zaposleni"
+ lblME_CP.Caption = "Zdravstveni pregledi"
+ lblZOP_CP.Caption = "Obuka protivpožarne zaštite"
+ lblZOP_CP.FontSize = 8
+ lblHSE_CP.Caption = "BZR obuka"
+ lblEmployees_Status.Caption = "Svi zaposleni"
+ btnAllEmployees_Open.Caption = "Otvori"
+ btnAllEmployees_Print.Caption = "Štampaj"
+ btnAllEmployees_Send.Caption = "Pošalji"
+ btnAllEmployees_Preview.Caption = "Pregled"
+ lblDA_Status.Caption = "Zaposleni bez zdravstvenog pregleda"
+ lblDA_Status.FontSize = 7
+ lblFPT_Status.Caption = "Zaposleni bez ZOP"
+ btnHC_Open.Caption = "Otvori"
+ btnHC_Print.Caption = "Štampanje"
+ btnHC_Send.Caption = "Slanje"
+ btnHC_Preview.Caption = "Pregled"
+ btnZOP_Open.Caption = "Otvori"
+ btnZOP_Print.Caption = "Štampanje"
+ btnZOP_Mail.Caption = "Slanje"
+ btnZOP_Preview.Caption = "Pregled"
+ btnFPT_Null.Caption = "Zaposleni bez obuke ZOP"
+ btnAddCategory.Caption = "Nova kategorija"
+ btnAddPosition.Caption = "Nova pozicija"
+ btnForm1.Caption = "Obrazac 1"
+ btnForm1.FontSize = 7
+ btnForm2.Caption = "Obrazac 2"
+ btnForm2.FontSize = 7
+ btnForm6.Caption = "Obrazac 6"
+ btnForm6.FontSize = 7
+ lblHSE_Status.Caption = "Zaposleni bez BZR obuke"
+ btnHSET_Open.Caption = "Otvori"
+ btnHSET_Print.Caption = "Štampanje"
+ btnHSET_Send.Caption = "Slanje"
+ btnHSET_Preview.Caption = "Pregled"
+ 
+    If DCount("ZaposleniID", "QPME_Main") > 0 Then
+        [Forms]![frmControlPanel].[txtPHC] = "Postoje zaposleni kojima je istekao periodièni lekarski pregled."
+        'DoCmd.OpenQuery "QPME_Main"
+    Else
+       [Forms]![frmControlPanel].[txtPHC] = "Svi periodièni lekarski pregledi su aktuelni."
+    End If
+    
+     If DCount("ZaposleniID", "QZOP_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtFPT] = "Postoje zaposleni koji nisu položili ZOP."
+        'DoCmd.OpenQuery "QZOP_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtFPT] = "Svi zaposleni su položili ZOP."
+    End If
+    
+    If DCount("ZaposleniID", "QLPR_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtHC] = "Postoje zaposleni koji nemaju uverenje o lekarskom pregledu."
+        'DoCmd.OpenQuery "QLPR_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtHC] = "Svi lekarski pregledi su aktuelni."
+    End If
+End Sub
+
+Private Sub btnLocalizationD_Click()
+ btnEmployeesForm_Open.Caption = "Geöffnet"
+ btnNewEmployee.Caption = "Neu"
+ btnHSEForm_Open.Caption = "Geöffnet"
+ btnNewDA.Caption = "Neu"
+ btnHCForm_Open.Caption = "Geöffnet"
+ btnNewHSE.Caption = "Neu"
+ btnCheck.Caption = "Aktuallisiere alles"
+ btnBackup.Caption = "Sicherungskopie"
+ btnOK.Caption = "Löschen"
+ pForms.Caption = "Allgemein"
+ pReports.Caption = "Berichte"
+ pQueries.Caption = "Abfrage"
+ lblEmployeesCP.Caption = "Mitarbeiter"
+ lblME_CP.Caption = "Gesundheitschecks"
+ lblZOP_CP.Caption = "Brandschutztraining"
+ lblZOP_CP.FontSize = 11
+ lblHSE_CP.Caption = "GSU Ausbildung"
+ lblEmployees_Status.Caption = "Alle Mitarbeiter"
+ btnAllEmployees_Open.Caption = "Geöffnet"
+ btnAllEmployees_Print.Caption = "Druck"
+ btnAllEmployees_Send.Caption = "Senden"
+ btnAllEmployees_Preview.Caption = "Vorschau"
+ lblDA_Status.Caption = "Mitarbeiter ohne Gesundheitschecks"
+ lblDA_Status.FontSize = 7
+ lblFPT_Status.Caption = "Mitarbeiter ohne BST"
+ btnHC_Open.Caption = "Geöffnet"
+ btnHC_Print.Caption = "Druck"
+ btnHC_Send.Caption = "Senden"
+ btnHC_Preview.Caption = "Vorschau"
+ btnZOP_Open.Caption = "Geöffnet"
+ btnZOP_Print.Caption = "Druck"
+ btnZOP_Mail.Caption = "Senden"
+ btnZOP_Preview.Caption = "Vorschau"
+ btnFPT_Null.Caption = "Mitarbeiter ohne BST"
+ btnAddCategory.Caption = "Neu Kategorie"
+ btnAddPosition.Caption = "Neu Position"
+ btnForm1.Caption = "Form 1"
+ btnForm1.FontSize = 8
+ btnForm2.Caption = "Form 2"
+ btnForm2.FontSize = 8
+ btnForm6.Caption = "Form 6"
+ btnForm6.FontSize = 8
+ lblHSE_Status.Caption = "Mitarbeiter ohne GSU"
+ btnHSET_Open.Caption = "Geöffnet"
+ btnHSET_Print.Caption = "Druck"
+ btnHSET_Send.Caption = "Senden"
+ btnHSET_Preview.Caption = "Vorschau"
+ 
+    If DCount("ZaposleniID", "QPME_Main") > 0 Then
+        [Forms]![frmControlPanel].[txtPHC] = "Es gibt einige Mitarbeiter mit einem abgelaufenen medizinischen Check."
+        'DoCmd.OpenQuery "QPME_Main"
+    Else
+       [Forms]![frmControlPanel].[txtPHC] = "Alle periodischen ärztlichen Untersuchungen sind aktuell."
+    End If
+    
+     If DCount("ZaposleniID", "QZOP_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtFPT] = "Es gibt Mitarbeiter, ohne BST."
+        'DoCmd.OpenQuery "QZOP_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtFPT] = "Alle Mitarbeiter sind vergangen BST."
+    End If
+    
+    If DCount("ZaposleniID", "QLPR_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtHC] = "Es gibt einige Mitarbeiter, die keine ärztliche Form haben."
+        'DoCmd.OpenQuery "QLPR_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtHC] = "Alle Vorsorgeformen sind up to date."
+    End If
+ 
+End Sub
+
+Private Sub btnLocalizationPL_Click()
+ btnEmployeesForm_Open.Caption = "Otwarte"
+ btnNewEmployee.Caption = "Nowy"
+ btnHCForm_Open.Caption = "Otwarte"
+ btnNewDA.Caption = "Nowy"
+ btnHSEForm_Open.Caption = "Otwarte"
+ btnNewHSE.Caption = "Nowy"
+ btnCheck.Caption = "Aktualizowaæ Wszystko"
+ btnBackup.Caption = "Kopiê Zapasow¹"
+ btnOK.Caption = "Blisko"
+ pForms.Caption = "Ogólnie"
+ pReports.Caption = "Raporty"
+ pQueries.Caption = "Pytanie"
+ lblEmployeesCP.Caption = "Pracowników"
+ lblME_CP.Caption = "Kontrole zdrowia"
+ lblZOP_CP.Caption = "Szkolenie ochrony przeciwpožarowej"
+ lblZOP_CP.FontSize = 8
+ lblHSE_CP.Caption = "BHP szkolenie"
+ lblEmployees_Status.Caption = "Wszystko Pracowników"
+ btnAllEmployees_Open.Caption = "Otwarte"
+ btnAllEmployees_Print.Caption = "Drukuj"
+ btnAllEmployees_Send.Caption = "Wys³aæ"
+ btnAllEmployees_Preview.Caption = "ZapowiedŸ"
+ lblDA_Status.Caption = "Pracowników bez kontrole zdrowia"
+ lblDA_Status.FontSize = 7
+ lblFPT_Status.Caption = "Pracowników bez SOP"
+ btnHC_Open.Caption = "Otwarte"
+ btnHC_Print.Caption = "Drukuj"
+ btnHC_Send.Caption = "Wys³aæ"
+ btnHC_Preview.Caption = "ZapowiedŸ"
+ btnZOP_Open.Caption = "Otwarte"
+ btnZOP_Print.Caption = "Drukuj"
+ btnZOP_Mail.Caption = "Wys³aæ"
+ btnZOP_Preview.Caption = "ZapowiedŸ"
+ btnFPT_Null.Caption = "Pracowników bez SOP"
+ btnAddCategory.Caption = "Nowa kategoria"
+ btnAddPosition.Caption = "Nova pozycja"
+ btnForm1.Caption = "Forma 1"
+ btnForm1.FontSize = 8
+ btnForm2.Caption = "Forma 2"
+ btnForm2.FontSize = 8
+ btnForm6.Caption = "Forma 6"
+ btnForm6.FontSize = 8
+ lblHSE_Status.Caption = "Pracowników bez BHP"
+ btnHSET_Open.Caption = "Otwarte"
+ btnHSET_Print.Caption = "Drukuj"
+ btnHSET_Send.Caption = "Wys³aæ"
+ btnHSET_Preview.Caption = "ZapowiedŸ"
+ 
+    If DCount("ZaposleniID", "QPME_Main") > 0 Then
+        [Forms]![frmControlPanel].[txtPHC] = "Istnieje kilka pracownicy z wygas³ym lekarskim."
+        'DoCmd.OpenQuery "QPME_Main"
+    Else
+       [Forms]![frmControlPanel].[txtPHC] = "Wszystkie okresowe badania lekarskie s¹ aktualne."
+    End If
+    
+     If DCount("ZaposleniID", "QZOP_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtFPT] = "Istiniej¹ pewne pracowników bez SOP."
+        'DoCmd.OpenQuery "QZOP_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtFPT] = "Wszyscy pracownicy minê³o SOP."
+    End If
+    
+    If DCount("ZaposleniID", "QLPR_MainNull") > 0 Then
+        [Forms]![frmControlPanel].[txtHC] = "Istnieje kilka pracowników, które nie maj¹ formy wyboru lekarza."
+        'DoCmd.OpenQuery "QLPR_MainNull"
+    Else
+       [Forms]![frmControlPanel].[txtHC] = "Wszystkie medyczne formy wyboru s¹ aktualne."
+    End If
+End Sub
+
+'frmHealthCheck
+Option Compare Database
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If Not (Me.NewRecord) Then
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+    End If
+    Else
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+        End If
+    End If
+End Sub
+
+'frmHSE
+Option Compare Database
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If Not (Me.NewRecord) Then
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+    End If
+    Else
+        If MsgBox("Da li želite da saèuvate promene u ovom zapisu?", vbQuestion + vbYesNo + vbDefaultButton1, "Saèuvati?") = vbNo Then
+        Me.Undo
+        End If
+    End If
+End Sub
+
+'frmForm1
+'Option Compare Database
+Option Explicit
+
+Public Function PrintWordForm(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim PrintResponse
+   Dim SaveFile As String
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open (strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("fldDHC").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!DatumPregledaF))
+       .ActiveDocument.Bookmarks("fldHCFormNumber").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!LPIDF))
+       .ActiveDocument.Bookmarks("fldImePrezime").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!ImePrezime))
+       .ActiveDocument.Bookmarks("fldJMBG").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!JMBGF))
+       .ActiveDocument.Bookmarks("fldDateOfBirth").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!DatumRodjenjaF))
+       .ActiveDocument.Bookmarks("fldLocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!MestoOpstina))
+       .ActiveDocument.Bookmarks("fldVocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!ZanimanjeF))
+       .ActiveDocument.Bookmarks("fldPosition").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!NazivRadnogMestaF))
+       .ActiveDocument.Bookmarks("fldDescription").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!OpisPoslovaF))
+       .ActiveDocument.Bookmarks("fldRA").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!RiziciF))
+       .ActiveDocument.Bookmarks("fldSpecCond").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!PosebniUsloviF))
+   End With
+   
+   'find out if the user would like to print the document
+   'at this time.
+
+   'PrintResponse = MsgBox("Print this document?", vbYesNo)
+   'If PrintResponse = vbYes Then
+      objWord.ActiveDocument.PrintOut Background:=True
+   'End If
+      objWord.ActiveDocument.Close SaveChanges:=False
+      objWord.Application.Quit
+
+   'release all objects
+         
+   Set objWord = Nothing
+   Set dbs = Nothing
+
+End Function
+
+Private Sub btnForm1Printer_Click()
+    PrintWordForm "\\smtwfs1\DATA\UserData\Office\Health and Safety\Evidencije\UputPrethodniLekarski.dotx"
+End Sub
+
+Public Function SaveWordForm(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim PrintResponse
+   Dim SaveFile
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open (strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("fldDHC").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!DatumPregledaF))
+       .ActiveDocument.Bookmarks("fldHCFormNumber").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!LPIDF))
+       .ActiveDocument.Bookmarks("fldImePrezime").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!ImePrezime))
+       .ActiveDocument.Bookmarks("fldJMBG").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!JMBGF))
+       .ActiveDocument.Bookmarks("fldDateOfBirth").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!DatumRodjenjaF))
+       .ActiveDocument.Bookmarks("fldLocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!MestoOpstina))
+       .ActiveDocument.Bookmarks("fldVocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!ZanimanjeF))
+       .ActiveDocument.Bookmarks("fldPosition").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!NazivRadnogMestaF))
+       .ActiveDocument.Bookmarks("fldDescription").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!OpisPoslovaF))
+       .ActiveDocument.Bookmarks("fldRA").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!RiziciF))
+       .ActiveDocument.Bookmarks("fldSpecCond").Select
+       .Selection.Text = (CStr(Forms!frmObrazac1!PosebniUsloviF))
+   End With
+   
+   'find out if the user would like to save the document
+   'at this time.
+
+   'SaveResponse = MsgBox("Save this document?", vbYesNo)
+   'If SaveResponse = vbYes Then
+   
+   SaveFile = "Obrazac 1 - " & Forms!frmObrazac1!ImePrezime & ".docx"
+   
+    ActiveDocument.SaveAs2 FileName:= _
+        "N:\Health and Safety\Lekarski pregled\Database\Obrazac 1\" & SaveFile, FileFormat:= _
+        wdFormatXMLDocument, LockComments:=False, Password:="", AddToRecentFiles _
+        :=True, WritePassword:="", ReadOnlyRecommended:=False, EmbedTrueTypeFonts _
+        :=False, SaveNativePictureFormat:=False, SaveFormsData:=False, _
+        SaveAsAOCELetter:=False, CompatibilityMode:=15
+   'End If
+      objWord.Application.Quit
+
+   'release all objects
+         
+   Set objWord = Nothing
+   Set dbs = Nothing
+
+End Function
+
+Private Sub btnForm1Word_Click()
+   SaveWordForm "\\smtwfs1\DATA\UserData\Office\Health and Safety\Evidencije\UputPrethodniLekarski.dotx"
+End Sub
+
+'frmForm2
+'Option Compare Database
+Option Explicit
+
+Public Function PrintWordForm(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim PrintResponse
+   Dim SaveFile As String
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open (strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("fldDHC").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!DatumPregledaF))
+       .ActiveDocument.Bookmarks("fldHCFormNumber").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!LPIDF))
+       .ActiveDocument.Bookmarks("fldImePrezime").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!ImePrezime))
+       .ActiveDocument.Bookmarks("fldJMBG").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!JMBGF))
+       .ActiveDocument.Bookmarks("fldDateOfBirth").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!DatumRodjenjaF))
+       .ActiveDocument.Bookmarks("fldLocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!MestoOpstina))
+       .ActiveDocument.Bookmarks("fldVocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!ZanimanjeF))
+       .ActiveDocument.Bookmarks("fldPosition").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!NazivRadnogMestaF))
+       .ActiveDocument.Bookmarks("fldDescription").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!OpisPoslovaF))
+       .ActiveDocument.Bookmarks("fldRA").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!RiziciF))
+       .ActiveDocument.Bookmarks("fldSpecCond").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!PosebniUsloviF))
+   End With
+   
+   'find out if the user would like to print the document
+   'at this time.
+
+   'PrintResponse = MsgBox("Print this document?", vbYesNo)
+   'If PrintResponse = vbYes Then
+      objWord.ActiveDocument.PrintOut Background:=True
+   'End If
+      objWord.ActiveDocument.Close SaveChanges:=False
+      objWord.Application.Quit
+
+   'release all objects
+         
+   Set objWord = Nothing
+   Set dbs = Nothing
+
+End Function
+
+Private Sub btnForm1Printer_Click()
+    PrintWordForm "\\smtwfs1\DATA\UserData\Office\Health and Safety\Evidencije\UputPeriodicniLekarski.dotx"
+End Sub
+
+Public Function SaveWordForm(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim SaveFile As Object
+   Dim PrintResponse
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open (strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("fldDHC").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!DatumPregledaF))
+       .ActiveDocument.Bookmarks("fldHCFormNumber").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!LPIDF))
+       .ActiveDocument.Bookmarks("fldImePrezime").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!ImePrezime))
+       .ActiveDocument.Bookmarks("fldJMBG").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!JMBGF))
+       .ActiveDocument.Bookmarks("fldDateOfBirth").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!DatumRodjenjaF))
+       .ActiveDocument.Bookmarks("fldLocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!MestoOpstina))
+       .ActiveDocument.Bookmarks("fldVocation").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!ZanimanjeF))
+       .ActiveDocument.Bookmarks("fldPosition").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!NazivRadnogMestaF))
+       .ActiveDocument.Bookmarks("fldDescription").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!OpisPoslovaF))
+       .ActiveDocument.Bookmarks("fldRA").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!RiziciF))
+       .ActiveDocument.Bookmarks("fldSpecCond").Select
+       .Selection.Text = (CStr(Forms!frmObrazac2!PosebniUsloviF))
+   End With
+   
+   'find out if the user would like to save the document
+   'at this time.
+
+   'SaveResponse = MsgBox("Save this document?", vbYesNo)
+   'If SaveResponse = vbYes Then
+   
+   SaveFile = "Obrazac 2 - " & Forms!frmObrazac2!ImePrezime & ".docx"
+   
+    ActiveDocument.SaveAs2 FileName:= _
+        "N:\Health and Safety\Lekarski pregled\Database\Obrazac 2\" & SaveFile, FileFormat:= _
+        wdFormatXMLDocument, LockComments:=False, Password:="", AddToRecentFiles _
+        :=True, WritePassword:="", ReadOnlyRecommended:=False, EmbedTrueTypeFonts _
+        :=False, SaveNativePictureFormat:=False, SaveFormsData:=False, _
+        SaveAsAOCELetter:=False, CompatibilityMode:=15
+   'End If
+      objWord.Application.Quit
+
+   'release all objects
+         
+   Set objWord = Nothing
+   Set dbs = Nothing
+
+End Function
+
+Private Sub btnForm1Word_Click()
+   SaveWordForm "\\smtwfs1\DATA\UserData\Office\Health and Safety\Evidencije\UputPeriodicniLekarski.dotx"
+End Sub
+
+
+'frmForm6
+'Option Compare Database
+Option Explicit
+
+Public Function PrintForm6(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim PrintResponse
+   Dim SaveFile As String
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open (strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("fldImePrezime").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!ImePrezime))
+       .ActiveDocument.Bookmarks("fldNazivRadnogMesta").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!NazivRadnogMestaF))
+       .ActiveDocument.Bookmarks("fldOpisPoslova").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!OpisPoslovaF))
+       .ActiveDocument.Bookmarks("fldDatumBZRObuke").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!DatumBZRObukeF))
+       .ActiveDocument.Bookmarks("fldPHSE").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!PHSE))
+       .ActiveDocument.Bookmarks("fldRizici").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!RiziciF))
+       .ActiveDocument.Bookmarks("fldMere").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!MereF))
+   End With
+
+   'find out if the user would like to print the document
+   'at this time.
+
+   'PrintResponse = MsgBox("Print this document?", vbYesNo)
+   'If PrintResponse = vbYes Then
+      objWord.ActiveDocument.PrintOut Background:=True
+   'End If
+      objWord.ActiveDocument.Close SaveChanges:=False
+      objWord.Application.Quit
+
+   'release all objects
+         
+   Set objWord = Nothing
+   Set dbs = Nothing
+
+End Function
+
+Private Sub btnSendToPrinter_Click()
+ PrintForm6 "\\smtwfs1\DATA\UserData\Office\Health and Safety\Evidencije\OBRAZAC_6_auto.dotx"
+End Sub
+
+Public Function SaveForm6(strDocPath As String)
+
+   If IsNull(strDocPath) Or strDocPath = "" Then
+      Exit Function
+   End If
+
+   Dim dbs As Database
+   Dim objWord As Object
+   Dim PrintResponse
+   Dim SaveFile As Object
+   Set dbs = CurrentDb
+   
+   'create reference to Word Object
+   
+   Set objWord = CreateObject("Word.Application")
+   
+   'Word Object is created - now let's fill it with data.
+   
+   With objWord
+       .Visible = True
+       .Documents.Open (strDocPath)
+       'move to each bookmark, and insert correct text.
+       .ActiveDocument.Bookmarks("fldImePrezime").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!ImePrezime))
+       .ActiveDocument.Bookmarks("fldNazivRadnogMesta").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!NazivRadnogMestaF))
+       .ActiveDocument.Bookmarks("fldOpisPoslova").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!OpisPoslovaF))
+       .ActiveDocument.Bookmarks("fldDatumBZRObuke").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!DatumBZRObukeF))
+       .ActiveDocument.Bookmarks("fldPHSE").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!PHSE))
+       .ActiveDocument.Bookmarks("fldRizici").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!RiziciF))
+       .ActiveDocument.Bookmarks("fldMere").Select
+       .Selection.Text = (CStr(Forms!frmObrazac6!MereF))
+   End With
+
+   'find out if the user would like to save the document
+   'at this time.
+
+   'SaveResponse = MsgBox("Save this document?", vbYesNo)
+   'If SaveResponse = vbYes Then
+   
+   SaveFile = "Obrazac 6 " & Forms!frmObrazac6!ZaposleniID & " - " & Forms!frmObrazac6!ImePrezime & ".docx"
+   'SaveFile = "Obrazac 6 " & Format(Now(), "yyyymmddhhmmss") & ".docx"
+   
+    ActiveDocument.SaveAs2 FileName:= _
+        "N:\Health and Safety\Training\Database" & SaveFile, FileFormat:= _
+        wdFormatXMLDocument, LockComments:=False, Password:="", AddToRecentFiles _
+        :=True, WritePassword:="", ReadOnlyRecommended:=False, EmbedTrueTypeFonts _
+        :=False, SaveNativePictureFormat:=False, SaveFormsData:=False, _
+        SaveAsAOCELetter:=False, CompatibilityMode:=15
+   'End If
+      objWord.Application.Quit
+
+   'release all objects
+         
+   Set objWord = Nothing
+   Set dbs = Nothing
+
+End Function
+
+Private Sub btnSaveToFile_Click()
+ SaveForm6 "\\smtwfs1\DATA\UserData\Office\Health and Safety\Evidencije\OBRAZAC_6_auto.dotx"
+End Sub

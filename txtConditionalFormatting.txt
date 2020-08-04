@@ -1,0 +1,14 @@
+Private Sub Worksheet_Change(ByVal Target As Range)
+Dim qNumber As Long
+qNumber = Target.Value
+
+If Not Intersect(Target, Range("D2:O33")) Is Nothing Then
+    If qNumber > 5 Then 
+     Target.Interior.Color = vbWhite
+    Else
+	Target.Interior.Color = vbRed
+    End If
+
+End If
+
+End Sub

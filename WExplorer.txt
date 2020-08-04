@@ -1,0 +1,8 @@
+    Dim Password As String
+    Do Until Password = "HSEStorage"
+        Password = InputBox("Upišite šifru u polje ispod", "Šifra", "????")
+    If Password = "" Then
+        Exit Sub
+    End If
+    Loop
+        Call Shell("explorer.exe" & " " & "\\smtwfs1\DATA\UserData\Office\Health and Safety\mdjukic", vbNormalFocus)

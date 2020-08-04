@@ -1,0 +1,18 @@
+Option Compare Database
+Option Explicit
+
+'Implemented March 2, 2016
+Public Function DeleteOldFiles()
+
+Dim FSO As Variant, oldDB As Variant
+Dim dbpath As String
+
+dbpath = CurrentProject.path
+
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    For Each oldDB In FSO.GetFolder(dbpath & "\backup\HSELiveDB\ ").Files
+        If DateDiff("m", oldDB.DateCreated, Now()) > 1 Then
+            Kill oldDB
+        End If
+    Next oldDB
+End Function

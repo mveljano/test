@@ -1,0 +1,7 @@
+Field Size: Double
+Format: Fixed
+Decimal Places: 0
+
+
+Validation Rule: >1001950000000 And <3112999999999
+Validation Text: This field needs to have exactly 13 numeric characters.

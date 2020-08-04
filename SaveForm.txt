@@ -1,0 +1,50 @@
+Private Sub btnSave_Click()
+On Error GoTo btnSave_Click_Err
+
+    On Error Resume Next
+    If (Form.Dirty) Then
+        DoCmd.RunCommand acCmdSaveRecord
+    End If
+    If (MacroError.Number <> 0) Then
+        Beep
+        MsgBox MacroError.Description, vbOKOnly, ""
+        Exit Sub
+    End If
+    On Error GoTo 0
+    DoCmd.GoToRecord , "", acNewRec
+    'DoCmd.GoToControl "First Name"
+
+
+btnSave_Click_Exit:
+    Exit Sub
+
+btnSave_Click_Err:
+    MsgBox Error$
+    Resume btnSave_Click_Exit
+
+Refresh
+End Sub
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+If Not (Me.NewRecord) Then
+ If MsgBox("Would You Like To Save The Changes To This Record?", vbQuestion + vbYesNo + vbDefaultButton1, "Save Changes to Record ???") = vbNo Then
+  Me.Undo
+ End If
+Else
+ If MsgBox("Would You Like To Save This New Record?", vbQuestion + vbYesNo + vbDefaultButton1, "Save This Record ???") = vbNo Then
+  Me.Undo
+ End If
+End If
+End Sub
+
+Private Sub Form_Dirty(Cancel As Integer)
+If Not (Me.NewRecord) Then
+ If MsgBox("Would You Like To Save The Changes To This Record?", vbQuestion + vbYesNo + vbDefaultButton1, "Save Changes to Record ???") = vbNo Then
+  Me.Undo
+ End If
+Else
+ If MsgBox("Would You Like To Save This New Record?", vbQuestion + vbYesNo + vbDefaultButton1, "Save This Record ???") = vbNo Then
+  Me.Undo
+ End If
+End If
+End Sub

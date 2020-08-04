@@ -1,0 +1,43 @@
+'Print Form 6
+
+    Dim appWord As Word.Application
+    Dim doc As Word.Document
+
+    'Avoid error 429, when Word isn't open.
+    On Error Resume Next
+    Err.Clear
+
+    'Set appWord object variable to running instance of Word.
+    Set appWord = GetObject(, "Word.Application")
+
+        If Err.Number <> 0 Then
+        'If Word isn't open, create a new instance of Word.
+            Set appWord = New Word.Application
+        End If
+
+    Set doc = appWord.Documents.Open("N:\Health and Safety\Evidencije\OBRAZAC_6_auto.dotx", , True)
+
+        With doc
+            .FormFields("fldImePrezime").Result = Me!ImePrezime
+            .FormFields("fldNazivRadnogMesta").Result = Me!NazivRadnogMesta
+            .FormFields("fldOpisPoslova").Result = Me!OpisPoslova
+            .FormFields("fldDatumHSEObuke").Result = Me!DatumHSEObuke
+            .FormFields("fldPHSE").Result = Me!PHSE
+            .FormFields("fldTCHSE").Result = Me!TCHSE
+            .FormFields("fldPCHSE").Result = Me!PCHSE
+            .FormFields("fldRizici").Result = Me!Rizici
+            .FormFields("fldMere").Result = Me!Mere
+            .FormFields("fldObavestenja").Result = Me!Obavestenja
+        
+            .Visible = True
+            .Activate
+        End With
+
+    Set doc = Nothing
+    Set appWord = Nothing
+
+Exit Sub
+
+errHandler:
+    MsgBox Err.Number & ": " & _
+        Err.Description

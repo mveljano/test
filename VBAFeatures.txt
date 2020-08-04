@@ -1,0 +1,53 @@
+Imports System.Text
+Imports Microsoft.Office
+Imports Access = Microsoft.Office.Interop.Access
+ 
+Public Class Form1
+    Private objParameters(0) As Object
+    Private objResult As Object = Nothing
+    Private sbSTDOutput As New StringBuilder
+ 
+    ' office macros only accept en-US culture
+    Private ci As System.Globalization.CultureInfo = New System.Globalization.CultureInfo("en-US")
+ 
+ 
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        RunAccessMacro()
+ 
+    End Sub
+ 
+    Private Sub RunAccessMacro()
+        Dim oAccess As Access.Application = Nothing
+ 
+        Try
+            'Start Access and open the database.
+            oAccess = New Microsoft.Office.Interop.Access.Application
+            oAccess.Visible = True
+            oAccess.OpenCurrentDatabase("C:\Users\v-bpeng\Desktop\ExecuteMacro.accdb", False)
+            RunMacro(oAccess, New Object() {"DoKbTest"})
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+        Finally
+            'Clean-up: Quit Access without saving changes to the database.
+            If oAccess IsNot Nothing Then
+                oAccess.DoCmd().Quit(Access.AcQuitOption.acQuitSaveNone)
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(oAccess)
+                oAccess = Nothing
+            End If
+        End Try
+    End Sub
+ 
+    Private Sub RunMacro(ByVal oApp As Object, ByVal oRunArgs() As Object)
+        oApp.GetType().InvokeMember("Run", System.Reflection.BindingFlags.Default Or System.Reflection.BindingFlags.InvokeMethod, Nothing, oApp, oRunArgs, ci)
+    End Sub
+ 
+End Class
+
+
+
+
+  'Start Access and open the database.
+  oAccess = New Microsoft.Office.Interop.Access.Application
+  oAccess.Visible = False
+  oAccess.OpenCurrentDatabase("c:\OfficeMacroTest.accdb", False)
+  oAccess.DoCmd().RunMacro("Macro1")
